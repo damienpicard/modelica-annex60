@@ -31,7 +31,12 @@ model GroundTemperatureResponse_r "Model calculating discrete load aggregation"
       hBor=borFieDat.conDat.hBor,
       dBor=borFieDat.conDat.dBor,
       rBor=borFieDat.conDat.rBor,
-      alpha=borFieDat.soiDat.alp) "String with encrypted g-function arguments";
+      alpha=borFieDat.soiDat.alp,
+      nbSeg=12,
+      nbTimSho=26,
+      nbTimLon=50,
+      relTol=0.02,
+      ttsMax=exp(5)) "String with encrypted g-function arguments";
   parameter String SHAgfun_r[nbTem]={ThermalResponseFactors.shaGFunction2(
       r=r_int[j],
       hBor=borFieDat.conDat.hBor,
@@ -168,7 +173,7 @@ equation
   when (sample(t0, tLoaAgg)) then
     (curCel,Q_shift) = LoadAggregation.nextTimeStep(
       i=i,
-      Q_i=pre(Q_i),
+      Q_i=Q_i,
       rCel=rCel,
       nu=nu,
       curTim=(time - t0));
@@ -177,7 +182,7 @@ equation
     Q_i = LoadAggregation.setCurLoa(
       i=i,
       Qb=(U-pre(UOld))/tLoaAgg,
-      Q_shift=Q_shift);
+      Q_shift=pre(Q_shift));
 
     delTbs = LoadAggregation.tempSuperposition(
       i=i,
