@@ -40,7 +40,9 @@ model BorefieldOneUTube
   GroundHeatTransfer.GroundTemperatureResponse groTemRes(
     tLoaAgg=tLoaAgg,
     p_max=p_max,
-    borFieDat=borFieDat) "Ground temperature response"
+    borFieDat=borFieDat,
+    forceGFunCalc=forceGFunCalc)
+                         "Ground temperature response"
     annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
   Modelica.Thermal.HeatTransfer.Components.ThermalCollector theCol(m=borFieDat.conDat.nVer)
     "Thermal collector to connect the unique ground temperature to each borehole wall temperature of each segment"
@@ -74,6 +76,8 @@ model BorefieldOneUTube
   Modelica.Blocks.Interfaces.RealInput TGro
     "Temperature input for undisturbed ground conditions"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
+  parameter Boolean forceGFunCalc=false
+    "Set to true to force the thermal response to be calculated at the start instead of checking whether this has been pre-computed";
 equation
   connect(masFloMul.port_b, port_b)
     annotation (Line(points={{80,0},{86,0},{100,0}}, color={0,127,255}));
